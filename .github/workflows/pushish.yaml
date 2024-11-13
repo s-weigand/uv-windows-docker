@@ -1,0 +1,40 @@
+name: Publish container
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Publish ${{ matrix.name }}
+    permissions:
+      contents: read
+      packages: write
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: server
+            dockerfile: docker/Dockerfile.server
+          - name: servercore
+            dockerfile: docker/Dockerfile.servercore
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set UV version
+        id: set-uv-version
+        shell: bash
+        run: echo "uv-version=$(cat .version)" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: uv-windows
+          tags: ${{ steps.set-uv-version.outputs.uv-version }}-${{ matrix.name }}
+          registry: ghcr.io
+          dockerfile: ${{ matrix.dockerfile }}
+          buildArgs: UV_VERSION=${{ steps.set-uv-version.outputs.uv-version }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}

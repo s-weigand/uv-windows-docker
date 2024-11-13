@@ -1,0 +1,18 @@
+# escape=`
+
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+RUN New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
+  -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+
+ARG UV_VERSION
+
+RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
+RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
+
+ARG PYTHON_VERSIONS="3.9 3.10 3.11 3.12 3.13"
+
+RUN uv python install $env:PYTHON_VERSIONS.split(' ')
