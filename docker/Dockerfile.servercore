@@ -2,6 +2,15 @@
 
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
+# OCI labels for metadata
+LABEL org.opencontainers.image.title="Windows Server Core LTSC 2022 Image pre-installed with uv and VC Redist"
+LABEL org.opencontainers.image.description="A Windows Server Core image with the uv python package and project manager from astral  installed, Python version 3.9-3.13 pre-installed, and including the Visual C++ Redistributable."
+LABEL org.opencontainers.image.version="0.0.2"
+# LABEL org.opencontainers.image.authors="Sebastian Weigand <s.weigand.phy@gmail.com>"
+LABEL org.opencontainers.image.url="https://github.com/s-weigand/uv-windows-docker"
+LABEL org.opencontainers.image.documentation="https://github.com/s-weigand/uv-windows-docker/blob/main/README.md"
+LABEL org.opencontainers.image.source=https://github.com/s-weigand/uv-windows-docker
+LABEL org.opencontainers.image.licenses="Apache-2.0"
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
