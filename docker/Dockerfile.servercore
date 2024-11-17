@@ -5,6 +5,12 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
+RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
+    $installerPath='C:\vc_redist.x64.exe'; `
+    Invoke-WebRequest -Uri $vcRedistUrl -OutFile $installerPath -UseBasicParsing; `
+    Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
+    Remove-Item -Path $installerPath -Force
+
 RUN New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
   -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
