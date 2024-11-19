@@ -1,6 +1,6 @@
 # uv-windows-docker
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 Repo to build and publish windows docker images with uv and multiple python versions installed
 
@@ -15,6 +15,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/s-weigand"><img src="https://avatars.githubusercontent.com/u/9513634?v=4?s=100" width="100px;" alt="Sebastian Weigand"/><br /><sub><b>Sebastian Weigand</b></sub></a><br /><a href="https://github.com/s-weigand/uv-windows-docker/commits?author=s-weigand" title="Code">💻</a> <a href="#ideas-s-weigand" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-s-weigand" title="Maintenance">🚧</a> <a href="#projectManagement-s-weigand" title="Project Management">📆</a> <a href="#infra-s-weigand" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jsnel"><img src="https://avatars.githubusercontent.com/u/3616369?v=4?s=100" width="100px;" alt="Joris Snellenburg"/><br /><sub><b>Joris Snellenburg</b></sub></a><br /><a href="https://github.com/s-weigand/uv-windows-docker/issues?q=author%3Ajsnel" title="Bug reports">🐛</a> <a href="https://github.com/s-weigand/uv-windows-docker/commits?author=jsnel" title="Code">💻</a> <a href="https://github.com/s-weigand/uv-windows-docker/commits?author=jsnel" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
