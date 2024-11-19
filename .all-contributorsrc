@@ -19,6 +19,17 @@
         "projectManagement",
         "infra"
       ]
+    },
+    {
+      "login": "jsnel",
+      "name": "Joris Snellenburg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3616369?v=4",
+      "profile": "https://github.com/jsnel",
+      "contributions": [
+        "bug",
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
