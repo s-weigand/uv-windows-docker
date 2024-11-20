@@ -1,17 +1,12 @@
 # uv-windows-docker
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-Repo to build and publish windows docker images with uv and multiple python versions installed
 
-Repo to build and publish windows docker images with uv and multiple python versions installed.
-
-Additionally the latest (2015-2022) Visual Studio Redistributable has been added to the images.
-
-The repo builds 2 images: `server` and `servercore` with the respective base images:
-
-- `mcr.microsoft.com/windows/server:ltsc2022`
-- `mcr.microsoft.com/windows/servercore:ltsc2022`
+This repository builds and publishes Windows Docker images with uv, multiple Python versions, the latest Visual Studio Redistributable (2015–2022), and includes two images—`server` and `servercore`—based on `mcr.microsoft.com/windows/server:ltsc2022` and `mcr.microsoft.com/windows/servercore:ltsc2022`, respectively.
 
 ## Contributors ✨
 
