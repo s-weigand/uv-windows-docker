@@ -2,17 +2,29 @@
 
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
+ARG UV_VERSION
+ARG PYTHON_VERSIONS="3.9 3.10 3.11 3.12 3.13"
+
+# OCI labels for metadata
+LABEL org.opencontainers.image.title="Windows Server Core LTSC 2022 Image pre-installed with uv and VC Redist"
+LABEL org.opencontainers.image.description="A Windows Server Core image with the uv python package and project manager from astral  installed, Python version 3.9-3.13 pre-installed, and including the Visual C++ Redistributable."
+LABEL org.opencontainers.image.version="${UV_VERSION}"
+LABEL org.opencontainers.image.url="https://github.com/s-weigand/uv-windows-docker"
+LABEL org.opencontainers.image.documentation="https://github.com/s-weigand/uv-windows-docker/blob/main/README.md"
+LABEL org.opencontainers.image.source=https://github.com/s-weigand/uv-windows-docker
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 RUN New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
   -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
-ARG UV_VERSION
+  RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
+    $installerPath='C:\vc_redist.x64.exe'; `
+    (New-Object System.Net.WebClient).DownloadFile($vcRedistUrl, $installerPath); `
+    Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
+    Remove-Item -Path $installerPath -Force
 
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
 RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
-
-ARG PYTHON_VERSIONS="3.9 3.10 3.11 3.12 3.13"
 
 RUN uv python install $env:PYTHON_VERSIONS.split(' ')
