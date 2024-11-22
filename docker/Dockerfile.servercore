@@ -1,6 +1,7 @@
 # escape=`
 
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
+# hadolint shell=powershell
 
 ARG UV_VERSION
 ARG PYTHON_VERSIONS="3.9 3.10 3.11 3.12 3.13"
@@ -18,13 +19,15 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 RUN New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
   -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
-  RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
-    $installerPath='C:\vc_redist.x64.exe'; `
-    (New-Object System.Net.WebClient).DownloadFile($vcRedistUrl, $installerPath); `
-    Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
-    Remove-Item -Path $installerPath -Force
+# hadolint ignore=DL3059
+RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
+  $installerPath='C:\vc_redist.x64.exe'; `
+  (New-Object System.Net.WebClient).DownloadFile($vcRedistUrl, $installerPath); `
+  Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
+  Remove-Item -Path $installerPath -Force
 
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
 RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
 
+# hadolint ignore=DL3059
 RUN uv python install $env:PYTHON_VERSIONS.split(' ')
