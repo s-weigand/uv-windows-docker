@@ -19,6 +19,7 @@ repos:
     hooks:
       - id: prettier
         additional_dependencies: ["prettier@3.3.3"]
+        exclude: ".all-contributorsrc"
 
   ###################
   #     LINTER      #
