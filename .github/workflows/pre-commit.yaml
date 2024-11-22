@@ -1,0 +1,33 @@
+name: 🧹 Pre-Commit
+
+on:
+  push:
+    tags:
+      - v**
+    branches-ignore:
+      - "dependabot/**"
+      - "sourcery/**"
+      - "pre-commit-ci-update-config"
+  pull_request:
+
+jobs:
+  pre-commit:
+    name: 🧹 Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⏬ Check out repo
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+          cache-dependency-glob: ".pre-commit-config.yaml"
+          cache-local-path: "~/.cache"
+          cache-suffix: uv-pre-commit-home
+
+      - name: 🧰🏃‍♂️ Run pre-commit
+        env:
+          PRE_COMMIT_HOME: "~/.cache/pa-envs"
+        run: |
+          uvx -p 3.13 --with pre-commit-uv pre-commit run --show-diff-on-failure --color=always -a
