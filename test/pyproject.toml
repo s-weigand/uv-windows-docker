@@ -1,0 +1,10 @@
+[project]
+name = "test"
+version = "0.1.0"
+description = "Just a test for the images"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = ["git_install_test_distribution"]
+
+[tool.uv.sources]
+git_install_test_distribution = { git = "https://github.com/s-weigand/git-install-test-distribution" }
