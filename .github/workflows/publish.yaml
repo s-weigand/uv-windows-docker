@@ -2,6 +2,7 @@ name: 🐋🚀 Publish images
 
 on:
   workflow_dispatch:
+  pull_request:
 
 jobs:
   build:
@@ -50,6 +51,7 @@ jobs:
           pushImage: false
 
       - name: 🚀🐋 Push image
+        if: github.event_name != 'pull_request'
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: uv-windows
