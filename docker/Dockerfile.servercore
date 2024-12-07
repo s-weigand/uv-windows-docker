@@ -24,6 +24,11 @@ RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
   Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
   Remove-Item -Path $installerPath -Force
 
+COPY --from=ghcr.io/s-weigand/mingit:ltsc2022 C:/git C:/git
+RUN [Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH') + ';C:/git/cmd;C:/git/mingw64/bin;C:/git/usr/bin', 'Machine')
+RUN $env:Path = 'C:/git/cmd;C:/git/mingw64/bin;C:/git/usr/bin;' + $env:Path
+RUN git config --global init.defaultBranch main
+
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
 RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
 
