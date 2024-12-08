@@ -1,28 +1,23 @@
 # escape=`
 
-FROM mcr.microsoft.com/windows/server:ltsc2022
+FROM ghcr.io/s-weigand/winget-windows:v1.9.25200-ltsc2022
 
 ARG UV_VERSION
 ARG PYTHON_VERSIONS="3.9 3.10 3.11 3.12 3.13"
 
 # OCI labels for metadata
-LABEL org.opencontainers.image.title="Windows Server LTSC 2022 Image pre-installed with uv and VC Redist"
-LABEL org.opencontainers.image.description="A Windows Server image with the uv python package and project manager from astral  installed, Python version 3.9-3.13 pre-installed, and including the Visual C++ Redistributable."
+LABEL org.opencontainers.image.title="Windows Server LTSC 2022 Image pre-installed with uv, winget, git+LSF and VC Redist"
+LABEL org.opencontainers.image.description="A Windows Server image with the winget windows package manager, git+LSF, uv python package and project manager from astral installed, Python version 3.9-3.13 pre-installed, and including the Visual C++ Redistributable."
 LABEL org.opencontainers.image.version="${UV_VERSION}"
 LABEL org.opencontainers.image.url="https://github.com/s-weigand/uv-windows-docker"
 LABEL org.opencontainers.image.documentation="https://github.com/s-weigand/uv-windows-docker/blob/main/README.md"
 LABEL org.opencontainers.image.source=https://github.com/s-weigand/uv-windows-docker
 
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+RUN winget.exe install --id "Git.Git" --exact --source winget `
+    --accept-source-agreements  --disable-interactivity --silent `
+    --accept-package-agreements --force
 
-RUN New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
-  -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
-
-RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
-    $installerPath='C:\vc_redist.x64.exe'; `
-    (New-Object System.Net.WebClient).DownloadFile($vcRedistUrl, $installerPath); `
-    Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
-    Remove-Item -Path $installerPath -Force
+RUN git config --global init.defaultBranch main
 
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
 RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
