@@ -21,6 +21,6 @@ RUN winget.exe install --id "Git.Git" --exact --source winget `
 RUN git config --global init.defaultBranch main
 
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
-RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
+RUN $env:Path = 'C:/Users/ContainerAdministrator/.local/bin;' + $env:Path
 
 RUN uv python install $env:PYTHON_VERSIONS.split(' ')

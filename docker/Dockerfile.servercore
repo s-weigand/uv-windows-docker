@@ -19,19 +19,19 @@ RUN New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
   -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
 
 RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
-  $installerPath='C:\vc_redist.x64.exe'; `
+  $installerPath='C:/vc_redist.x64.exe'; `
   (New-Object System.Net.WebClient).DownloadFile($vcRedistUrl, $installerPath); `
   Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
   Remove-Item -Path $installerPath -Force
 
 RUN $downloadUrl='https://github.com/git-for-windows/git/releases/download/v2.47.0.windows.2/MinGit-2.47.0.2-64-bit.zip'; `
-  $artifactPath='C:\mingit.zip'; `
+  $artifactPath='C:/mingit.zip'; `
   (New-Object System.Net.WebClient).DownloadFile($downloadUrl, $artifactPath); `
   Expand-Archive -Path $artifactPath -DestinationPath C:/git; `
   Remove-Item -Path $artifactPath -Force
 
 RUN $downloadUrl='https://github.com/git-lfs/git-lfs/releases/download/v3.6.0/git-lfs-windows-amd64-v3.6.0.zip'; `
-  $artifactPath='C:\git-lfs.zip'; `
+  $artifactPath='C:/git-lfs.zip'; `
   $tmpExtractFolder='c:/tmp/git-lfs-3.6.0'; `
   (New-Object System.Net.WebClient).DownloadFile($downloadUrl, $artifactPath); `
   Expand-Archive -Path $artifactPath -DestinationPath C:/tmp; `
@@ -47,6 +47,6 @@ RUN git config --global init.defaultBranch main
 RUN git lfs install
 
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
-RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
+RUN $env:Path = 'C:/Users/ContainerAdministrator/.local/bin;' + $env:Path
 
 RUN uv python install $env:PYTHON_VERSIONS.split(' ')
