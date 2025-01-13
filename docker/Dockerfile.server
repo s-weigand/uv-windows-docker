@@ -15,7 +15,8 @@ LABEL org.opencontainers.image.source=https://github.com/s-weigand/uv-windows-do
 
 RUN winget.exe install --id "Git.Git" --exact --source winget `
     --accept-source-agreements  --disable-interactivity --silent `
-    --accept-package-agreements --force
+    --accept-package-agreements --force `
+    --version 2.47.0.2
 
 RUN git config --global init.defaultBranch main
 
