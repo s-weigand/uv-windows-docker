@@ -24,10 +24,27 @@ RUN $vcRedistUrl='https://aka.ms/vs/17/release/vc_redist.x64.exe'; `
   Start-Process -FilePath $installerPath -ArgumentList '/install', '/quiet', '/norestart' -NoNewWindow -Wait; `
   Remove-Item -Path $installerPath -Force
 
-COPY --from=ghcr.io/s-weigand/mingit:ltsc2022 C:/git C:/git
+RUN $downloadUrl='https://github.com/git-for-windows/git/releases/download/v2.47.0.windows.2/MinGit-2.47.0.2-64-bit.zip'; `
+  $artifactPath='C:\mingit.zip'; `
+  (New-Object System.Net.WebClient).DownloadFile($downloadUrl, $artifactPath); `
+  Expand-Archive -Path $artifactPath -DestinationPath C:/git; `
+  Remove-Item -Path $artifactPath -Force
+
+RUN $downloadUrl='https://github.com/git-lfs/git-lfs/releases/download/v3.6.0/git-lfs-windows-amd64-v3.6.0.zip'; `
+  $artifactPath='C:\git-lfs.zip'; `
+  $tmpExtractFolder='c:/tmp/git-lfs-3.6.0'; `
+  (New-Object System.Net.WebClient).DownloadFile($downloadUrl, $artifactPath); `
+  Expand-Archive -Path $artifactPath -DestinationPath C:/tmp; `
+  Remove-Item -Path $artifactPath -Force; `
+  Copy-Item "$tmpExtractFolder/git-lfs.exe" 'c:/git/cmd/git-lfs.exe'; `
+  # Disable error about missing file, we can't view it in the container anyway due to the missing browser
+  New-Item 'C:/git/mingw64/share/doc/git-doc/git-lfs.html' -Force; `
+  Remove-Item -Path $tmpExtractFolder -Recurse -Force
+
 RUN [Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH') + ';C:/git/cmd;C:/git/mingw64/bin;C:/git/usr/bin', 'Machine')
 RUN $env:Path = 'C:/git/cmd;C:/git/mingw64/bin;C:/git/usr/bin;' + $env:Path
 RUN git config --global init.defaultBranch main
+RUN git lfs install
 
 RUN irm https://astral.sh/uv/$env:UV_VERSION/install.ps1 | iex
 RUN $env:Path = 'C:\Users\ContainerAdministrator\.local\bin;' + $env:Path
